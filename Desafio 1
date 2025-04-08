@@ -1,0 +1,60 @@
+#include <iostream>
+#include <stdio.h>
+#include <locale.h>
+/*criar um programa que checa se o numero é palindromo, o numero deve ter 4 digitos*/
+
+int main(int argc, char** argv) {
+	int	vetord[4];
+	int i=0, s, num, nu1;
+	
+	printf("Um numero palíndromo e um numero que se le da mesma de tras para fentre e de frente para tras. \nAlem de ser dividivel por 11. ");
+	printf("\nDigite um número de quatro digitos:");                      
+	scanf("%d", &num);
+	nu1 = num ;/*quarda o numero original*/
+	
+	/*Todo número palíndromo com um número par de dígitos é divisível por 11*/
+	/*por tanto para verificar se é ou nao basta dividir por 11*/
+	
+	
+	/*Armazenar o numero no vetor*/
+    while (num > 0) {
+        vetord[i] = num % 10;  // Pega o último dígito
+        num = num / 10;         // tira o último dígito
+        i++;                    // vai para a próxima posição no vetor
+    }
+    
+    /* vai comparar os numeros para ver se é palindromo*/ 
+    /* for percorre a primeira metade do vetor, para cada indice ele compara o da frente com o do final*/
+    /*vetord[s] é o dígito da primeira metade, vetord[i - s - 1] é o dígito da segunda metade*/
+    /*Se qualquer par de dígitos não for igual, o número não é palíndromo*/
+    /*compara o vetor na posicao 0 com o da posicao 3 , o da posicao 1 com o da posicao 2*/
+    
+    int palindromo = 1;
+    for (s = 0; s < i / 2; s++) {
+        if (vetord[s] != vetord[i - s - 1]) {                                              
+		palindromo = 0;  // Não é palíndromo        
+        break;
+        }
+    }
+    
+if (palindromo) {
+        printf("%d e um numero palindromo.\n", nu1);
+		   
+	if (nu1 % 11 ==0){
+	 printf("%d tambem e divisivel por 11.\n", nu1);
+        } 
+        
+		else {
+            printf("%d nao e divisivel por 11.\n", nu1);
+        }
+    }
+        
+else {
+        printf("%d nao e um numero palindromo.\n", nu1);
+    }	
+	
+	
+	 
+return 0;
+}
+	
