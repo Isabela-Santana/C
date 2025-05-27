@@ -1,0 +1,177 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+// para as tarefas//
+
+typedef struct tarefa {
+    char nome[60];
+    int prioridade;
+    int tempo;
+    struct tarefa* proxima; // declara um ponteiro que aponta para a proxima tarefa da lista//
+} Tarefa; // para usar sem prescisar usar struct tarefa toda vez que prescisar//
+
+// Ponteiro para lista //
+Tarefa* inicio = NULL;
+
+// Pilha para remover tarefas //
+Tarefa* pilharemover = NULL;
+
+// Função para criar uma nova tarefa//
+Tarefa* criarTarefa(const char* nome, int prioridade, int tempo) {
+    Tarefa* nova = (Tarefa*) malloc(sizeof(Tarefa));
+    if (nova == NULL) {
+        printf("Erro ao alocar memória!\n");
+        exit(1);// para terminar na hora , (1) mostra erro//
+    }
+
+    int i;
+    // para copiar string//   
+    for (i = 0; i < 59 && nome[i] != '\0'; i++) {
+        nova->nome[i] = nome[i];
+    }
+    nova->nome[i] = '\0';
+
+    // para inicializar//
+    nova->prioridade = prioridade;
+    nova->tempo = tempo;
+    nova->proxima = NULL;
+    return nova;
+}
+
+// Adicionar tarefa no final da lista//
+void adicionarTarefa(const char* nome, int prioridade, int tempo) {
+    Tarefa* nova = criarTarefa(nome, prioridade, tempo);
+    if (inicio == NULL) {
+        inicio = nova;
+    } else {
+        Tarefa* aux = inicio; // aux para nao perder o ponteiro inicial//
+        while (aux->proxima != NULL) {
+            aux = aux->proxima;
+        }
+        aux->proxima = nova;
+    }
+    printf("Tarefa adicionada!\n");
+}
+
+// Remover a última tarefa da lista e colocar na pilha para remover//
+void removerTarefa() {
+    if (inicio == NULL) {
+        printf("Nenhuma tarefa para remover.\n");
+        return;
+    }
+    if (inicio->proxima == NULL) {
+        // tem só 1 um elemento//
+        inicio->proxima = pilharemover;
+        pilharemover = inicio;
+        inicio = NULL;
+    } else {
+        Tarefa* aux = inicio;
+        while (aux->proxima->proxima != NULL) {
+            aux = aux->proxima;
+        }
+        Tarefa* remover = aux->proxima;
+        aux->proxima = NULL;
+
+        remover->proxima = pilharemover;
+        pilharemover = remover;
+    }
+    printf("Última tarefa removida (remover disponível).\n");
+}
+
+// Função para desfazer a remoção (retorna tarefa da pilha para a lista)//
+void desfazerTarefa() {
+    if (pilharemover == NULL) {
+        printf("Nenhuma tarefa para remover.\n");
+        return;
+    }
+    Tarefa* desfazer = pilharemover;
+    pilharemover = pilharemover->proxima;
+
+    desfazer->proxima = NULL;
+    if (inicio == NULL) {
+        inicio = desfazer;
+    } else {
+        Tarefa* aux = inicio;
+        while (aux->proxima != NULL) {
+            aux = aux->proxima;
+        }
+        aux->proxima = desfazer;
+    }
+    printf("Última tarefa removida foi restaurada.\n");
+}
+
+// Executar a primeira tarefa //
+void executarTarefa() {
+    if (inicio == NULL) {
+        printf("Nenhuma tarefa para executar.\n");
+        return;
+    }
+    Tarefa* executar = inicio;
+    inicio = inicio->proxima;
+
+    printf("Executando tarefa: %s (%d min)\n", executar->nome, executar->tempo);
+    free(executar);//limpar memoria//
+}
+
+// Função auxiliar para ordenar as tarefas//
+void trocarTarefas(Tarefa* a, Tarefa* b) {
+    Tarefa temp = *a;
+    *a = *b;
+    *b = temp;
+
+    // Corrigir os ponteiros proxima, para manter a lista válida//
+    Tarefa* aux = a->proxima;
+    a->proxima = b->proxima;
+    b->proxima = aux;
+}
+
+// Ordenar a  lista por prioridade (Bubble Sort)//
+void ordenarPorPrioridade() {
+    if (inicio == NULL) return;
+
+    int trocou;
+    do {
+        trocou = 0;
+        Tarefa* atual = inicio;
+        while (atual->proxima != NULL) {
+            if (atual->prioridade > atual->proxima->prioridade) {
+                trocarTarefas(atual, atual->proxima);
+                trocou = 1;
+            }
+            atual = atual->proxima;
+        }
+    } while (trocou);
+}
+
+// Função para exibir tarefas//
+void exibirTarefas() {
+    if (inicio == NULL) {
+        printf("Nenhuma tarefa para exibir.\n");
+        return;
+    }
+    Tarefa* aux = inicio;
+    while (aux != NULL) {
+        printf("Nome: %s | Prioridade: %d | Tempo: %d min\n", aux->nome, aux->prioridade, aux->tempo);
+        aux = aux->proxima;
+    }
+}
+
+// Menu principal//
+int main() {
+    int opcao;
+    char nome[60];
+    int prioridade, tempo;
+
+    do {
+        printf("\n**** Gerenciador de Tarefas ****\n");
+        printf("1. Adicionar tarefa\n");
+        printf("2. Exibir tarefas\n");
+        printf("3. Desfazer/remover última tarefa\n");
+        printf("4. Executar próxima tarefa\n");
+        printf("5. Ordenar tarefas por prioridade\n");
+        printf("0. Sair\n");
+        printf("Escolha: ");
+        scanf("%d", &opcao);
+        getchar(); // limpa '\n' do buffer("teclado")//
+}
