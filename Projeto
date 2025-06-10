@@ -202,8 +202,8 @@ int main() {
         printf("\n 2: Exibir tarefas\n");
         printf("\n 3: Remover ultima tarefa\n");
         printf("\n 4: Ordenar tarefas por prioridade Bubble Sort\n");
-		printf("\n 5: Ordenar tarefas por prioridade Insertion Sort\n");
-		printf("\n 6: Ordenar tarefas por prioridade Selection Sort\n");
+	printf("\n 5: Ordenar tarefas por prioridade Insertion Sort\n");
+	printf("\n 6: Ordenar tarefas por prioridade Selection Sort\n");
         printf("\n 0: Sair\n");
         printf("\n Escolha: ");
         scanf("%d", &opcao);
@@ -214,9 +214,9 @@ int main() {
 		case 1:
 			printf("Nome:\n");
 			fgets(nome,sizeof(nome),stdin);
-			printf("Prioridade(1-5):");
+			printf("Prioridade(1-5):\n");
 			scanf("%d",&prioridade);
-			printf("Tempo estimado(min):");
+			printf("Tempo estimado(min):\n");
 			scanf("%d",&tempo);
 			getchar();
 			adicionarTarefa(nome,prioridade,tempo);
