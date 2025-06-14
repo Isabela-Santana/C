@@ -94,8 +94,8 @@ void trocarTarefas(Tarefa* a, Tarefa* b) {
     b->proxima = aux;
 }
 
-// Ordenar a  lista por prioridade (Bubble Sort)//
-void ordenarPorPrioridadeBubble() {
+// Ordenar a  lista por tempo (Bubble Sort)//
+void ordenarPorTempoBubble() {
     if (inicio == NULL) return;
 
     int trocou;
@@ -103,7 +103,7 @@ void ordenarPorPrioridadeBubble() {
         trocou = 0;
         Tarefa* atual = inicio;
         while (atual->proxima != NULL) {
-            if (atual->prioridade > atual->proxima->prioridade) {
+            if (atual->tempo > atual->proxima->tempo) {
                 trocarTarefas(atual, atual->proxima);
                 trocou = 1;
             }
@@ -135,7 +135,7 @@ void ordenarPorPrioridadeInsertion() {
     inicio = sorted;
 }
 // o menor move para nova lista//
-void ordenarPorPrioridadeSelection() {
+void ordenarPorNomeSelection() {
     Tarefa* novaLista = NULL;
 
     while (inicio != NULL) {
@@ -144,9 +144,9 @@ void ordenarPorPrioridadeSelection() {
         Tarefa* atual = inicio;
         Tarefa* anteriorAtual = NULL;
 
-        // Busca o nó com a menor prioridade//
+        // Busca o nó com o menor nome//
         while (atual != NULL) {
-            if (atual->prioridade < menor->prioridade) {
+            if (strcmp(atual-> nome ,  menor-> nome) <0) {
                 menor = atual;
                 anteriorMenor = anteriorAtual;
             }
@@ -196,14 +196,14 @@ int main() {
     int prioridade, tempo;
 
     do {
-        printf("\n\n**** Gerenciador de Tarefas ****\n\n");
-        printf("\n [1 prioridade max, 2 rasoavel, 3 indiferente, 4 pouca prioridade, 5 prioridade minima.]\n\n");
+        printf("\n\n**** Gerenciador de Tarefas *****\n\n");
+        printf("\n -[1 prioridade maxima, 2 rasoavel, 3 indiferente, 4 pouca prioridade, 5 prioridade minima.]-\n\n");
         printf("\n 1: Adicionar tarefa\n");
         printf("\n 2: Exibir tarefas\n");
         printf("\n 3: Remover ultima tarefa\n");
-        printf("\n 4: Ordenar tarefas por prioridade Bubble Sort\n");
-	printf("\n 5: Ordenar tarefas por prioridade Insertion Sort\n");
-	printf("\n 6: Ordenar tarefas por prioridade Selection Sort\n");
+        printf("\n 4: Ordenar tarefas por tempo Bubble Sort  (Do menor para o maior tempo).\n");
+		printf("\n 5: Ordenar tarefas por prioridade Insertion Sort (1-5).\n");
+		printf("\n 6: Ordenar tarefas por nome em ordem alfabetica SelectionSort.\n");
         printf("\n 0: Sair\n");
         printf("\n Escolha: ");
         scanf("%d", &opcao);
@@ -213,6 +213,7 @@ int main() {
 		switch(opcao){
 		case 1:
 			printf("Nome:\n");
+			
 			fgets(nome,sizeof(nome),stdin);
 			printf("Prioridade(1-5):\n");
 			scanf("%d",&prioridade);
@@ -231,7 +232,7 @@ int main() {
 			break;
 	
 		case 4:
-    		ordenarPorPrioridadeBubble();
+    		ordenarPorTempoBubble();
    			printf("Tarefas ordenadas (Bubble).\n");
     		break;
     		
@@ -241,6 +242,7 @@ int main() {
    		 	break;
    		 	
 		case 6:	
+			ordenarPorNomeSelection();			
     		printf("Tarefas ordenadas (Selection).\n");
     		break;
     		
